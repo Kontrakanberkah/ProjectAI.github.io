@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+  <title>Deteksi Kualitas Jaringan</title>
+  <link rel="icon" href="https://png.pngtree.com/png-clipart/20221113/ourmid/pngtree-wifi-wireless-internet-3d-icon-hd-image-png-image_6325173.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+	  padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 2000px; /* Tinggi konten agar dapat di-scroll */
+      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe0JVFT4H6LD-5qyXVUNR_BOwI-B_wXRm_qQ&usqp=CAU'); /* Ganti dengan URL gambar Anda */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+	  position: relative;
+	  background-attachment: fixed; /* Mengikuti scroll */
+	  
+    }
+	
+	/* Gaya untuk tombol */
+    .change-background-btn {
+	
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 5px;
+    }
+	
+	  .background-box {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 9999;
+    }
+	
+	  .saveExcel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+
+	  .tabelBox {
+      position: fixed;
+      top: 20px;
+      bottom: 20px;
+      z-index: 9999;
+    }
+
+    .content {
+      width: 80%;
+      max-width: 600px;
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.8); /* Warna latar belakang konten */
+      padding: 20px;
+      border-radius: 10px; /* Sudut sudut konten */
+    }
+
+    header {
+      padding: 20px 0;
+      background-color: #333;
+      color: white;
+      border-radius: 8px 8px 0 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .info-section {
+	  font-size: 14px;
+      margin-top: 2px;
+      padding: 5px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+	
+	.info-jar{
+	  font-size: 14px;
+      margin-top: 2px;
+      padding: 5px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+	
+	.cek-kual{
+	  font-size: 14px;
+      margin-top: 2px;
+      padding: 5px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+	
+	.info-predict{
+	  font-size: 14px;
+      margin-top: 2px;
+      padding: 5px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+	
+.prediction-inputs {
+  text-align: left;
+  padding: 10px;
+}
+
+.prediction-inputs label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.prediction-inputs input {
+  display: block;
+  width: calc(100% - 22px);
+  padding: 5px;
+  margin-bottom: 2px;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+}
+
+    #dateTime {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #FFF; /* Mengatur warna teks menjadi putih */
+      margin-top: 10px;
+    }
+
+.response-box {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  background-color: white; /* Menetapkan latar belakang putih */
+}
+
+    /* Gaya untuk tabel */
+    table {
+	  border-radius: 5px;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    /* Gaya untuk sel */
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: center;
+      padding: 8px;
+    }
+
+    /* Gaya untuk baris header */
+    th {
+	border-radius: 5px;
+      background-color: #f2f2f2;
+    }
+
+    /* Gaya saat mengarahkan kursor pada baris */
+    tr:hover {
+	border-radius: 5px;
+      background-color: #f5f5f5;
+    }
+
+  </style>
+</head>
+<body>
+	<div class="background-box">
+    <button class="change-background-btn" onclick="changeBackground()">Ganti Background</button>
+	<button onclick="resetPage()">Reset</button>
+	</div>
+	
+	<div class="saveExcel">
+	<button onclick="saveToExcel()">Save to Excel</button>
+    <button onclick="addToHistory()">Add to Riwayat</button>
+  </div>
+
+  <div class="content">
+    <header>
+      <h1>Deteksi Kualitas Jaringan</h1>
+	  <div id="dateTime"></div>
+    </header>
+    <div>
+      <button onclick="showNetworkInfo()"><i class="fas fa-info-circle"></i> Info Jaringan</button>
+      <button onclick="checkPing()"><i class="fas fa-wifi"></i> Cek Ping</button>
+      <button onclick="checkPublicIP()"><i class="fas fa-globe"></i> Cek IP</button>
+	  <button onclick="togglePredictionInputs()"><i class="fas fa-chart-line"></i> Kalkulator Cek Kualitas Jaringan Metode KNN</button>
+	  <button onclick="performPrediction()">Dapatkan Prediksi</button>
+
+
+    <div>
+	
+	<div>
+      <input type="text" id="questionInput" placeholder="Tanyakan sesuatu...">
+      <button onclick="askQuestion()">Kirim</button>
+    </div>
+    <div class="answer" id="answer"></div>
+	
+	<div class="info-jar" id="infoBox" style="display: none;">
+	<div id="networkInfo"></div>
+	</div>
+	
+    <div class="info-section">
+	<div class="prediction-inputs" id="predictionInputs" style="display: none;">
+		  <label for="latency">Latensi atau Ping (ms):</label>
+		  <input type="number" id="latency" name="latency">
+		  <label for="speed">Kecepatan Jaringan (Mbps):</label>
+		  <input type="number" id="speed" name="speed">
+		  <button onclick="predictNetworkQuality()">Prediksi</button>
+	</div>
+    </div>
+	
+  <div class="info-predict">
+  <div id="predictionResult" style="font-weight: bold;"></div><!-- Tambahkan div untuk menampilkan hasil prediksi -->
+  	</div>
+  
+    <div class="cek-kual">
+      <div id="networkQualityPing"></div>
+	  <div id="networkQualityIP"></div>
+    </div>
+  </div>
+
+  <!-- Tabel untuk menampilkan riwayat sementara -->
+  <div class="TabelBox">
+  <div id="historyTable">
+    <table id="history">
+      <thead>
+        <tr>
+          <th>Informasi Jaringan</th>
+          <th>Waktu & Tanggal</th>
+          <th>Ping</th>
+          <th>Alamat IP</th>
+		  <th>Hasil Prediksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data riwayat percobaan akan ditampilkan di sini -->
+      </tbody>
+    </table>
+  </div>
+	</div>
+<!-- ####################################################################################################################################################### -->  
+  
+  <script>
+// Fungsi untuk menampilkan atau menyembunyikan kotak input latensi dan kecepatan jaringan
+function togglePredictionInputs() {
+  var inputDiv = document.getElementById('predictionInputs');
+  if (inputDiv.style.display === 'block') {
+    closePredictionInputs();
+  } else {
+    inputDiv.style.display = 'block';
+  }
+}
+// Fungsi untuk menutup kotak input prediksi
+function closePredictionInputs() {
+  var inputDiv = document.getElementById('predictionInputs');
+  inputDiv.style.display = 'none';
+}
+
+// Fungsi untuk memprediksi kualitas jaringan menggunakan KNN (tetap menggunakan contoh data sebelumnya)
+function predictNetworkQuality() {
+  var latency = parseFloat(document.getElementById('latency').value);
+  var speed = parseFloat(document.getElementById('speed').value);
+
+  var prediction = predictKNN(latency, speed); // Menggunakan data trainingData
+
+  displayPrediction(prediction);
+}
+
+// Fungsi untuk menampilkan hasil prediksi
+function displayPrediction(prediction) {
+  var outputDiv = document.getElementById('predictionResult');
+  outputDiv.innerHTML = "Hasil Prediksi Kualitas Jaringan: " + prediction;
+  
+  setTimeout(function() {
+    outputDiv.innerHTML = "";
+  }, 10000); // Menampilkan hasil prediksi selama 10 detik
+}
+
+// Data latensi, kecepatan jaringan, dan label kualitas jaringan
+var trainingData = [
+  { latency: 100, speed: 10, quality: 'Excellent' },
+  { latency: 150, speed: 8, quality: 'Good' },
+  { latency: 200, speed: 6, quality: 'Bad' },
+  // Tambahkan data latensi, kecepatan, dan label kualitas lainnya
+];
+
+// Fungsi untuk melakukan prediksi KNN
+function predictKNN(latency, speed) {
+  var k = 3; // Jumlah tetangga terdekat yang digunakan
+  var neighbors = findNeighbors(latency, speed, k, trainingData); // Menggunakan data trainingData
+
+  // Menghitung mayoritas kelas dari tetangga terdekat
+  var qualityCount = {};
+  for (var i = 0; i < neighbors.length; i++) {
+    var quality = neighbors[i].quality;
+    qualityCount[quality] = (qualityCount[quality] || 0) + 1;
+  }
+
+  // Menentukan kualitas berdasarkan mayoritas tetangga terdekat
+  var maxQuality = '';
+  var maxCount = 0;
+  for (var quality in qualityCount) {
+    if (qualityCount[quality] > maxCount) {
+      maxQuality = quality;
+      maxCount = qualityCount[quality];
+    }
+  }
+
+  return maxQuality;
+}
+
+// Fungsi untuk mencari k tetangga terdekat berdasarkan jarak Euclidean
+function findNeighbors(latency, speed, k, data) {
+  var distances = [];
+  for (var i = 0; i < data.length; i++) {
+    var d = Math.sqrt(Math.pow(latency - data[i].latency, 2) + Math.pow(speed - data[i].speed, 2));
+    distances.push({ distance: d, quality: data[i].quality });
+  }
+
+  distances.sort((a, b) => a.distance - b.distance);
+
+  return distances.slice(0, k);
+}
+
+//###############################################################################################################################################################
+
+function checkPing() {
+var latency = 0;
+  var outputDiv = document.getElementById('networkQualityPing');
+  outputDiv.innerHTML = 'Sedang melakukan ping...';
+
+  setTimeout(function() {
+    var startTime = new Date().getTime();
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        var endTime = new Date().getTime();
+        var latency = navigator.connection.rtt;
+
+        // Menampilkan hasil ping
+        outputDiv.innerHTML = "Ping: " + latency + "ms";
+        closePredictionInputs(); // Menutup kotak input setelah menampilkan hasil ping
+        hideResponseBox(); // Menyembunyikan kotak pesan
+      }
+	    setTimeout(function() {
+        outputDiv.innerHTML = "";
+     }, 10000); // Menampilkan hasil prediksi selama 10 detik
+    };
+
+    xhr.open('GET', '192.168.1.1', true); // Ganti dengan URL ping yang sesuai
+    xhr.send();
+  }, 3000); // Delay dalam milidetik (di sini 2000ms atau 2 detik)
+}
+
+//###############################################################################################################################################################
+
+function checkPublicIP() {
+  var outputDiv = document.getElementById('networkQualityIP');
+  outputDiv.innerHTML = 'Mendapatkan IP publik...';
+
+  setTimeout(function() {
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          var publicIP = xhr.responseText;
+          outputDiv.innerHTML = "IP Publik: " + publicIP;
+          closePredictionInputs(); // Menutup kotak input setelah menampilkan hasil IP publik
+          hideResponseBox(); // Menyembunyikan kotak pesan
+        } else {
+          outputDiv.innerHTML = 'Gagal mendapatkan IP.';
+          closePredictionInputs(); // Menutup kotak input jika gagal mendapatkan IP
+          hideResponseBox(); // Menyembunyikan kotak pesan
+        }  
+		setTimeout(function() {
+        outputDiv.innerHTML = "";
+     }, 10000); // Menampilkan hasil prediksi selama 10 detik
+      }
+    };
+
+    xhr.open('GET', 'https://api.ipify.org', true);
+    xhr.send();
+  }, 3000); // Delay dalam milidetik (di sini 2000ms atau 2 detik)
+}
+	
+//###############################################################################################################################################################
+	
+function showNetworkInfo() {
+  var infoBox = document.getElementById("infoBox");
+  infoBox.style.display = "block";
+  var outputDiv = document.getElementById('networkInfo');
+  var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+
+  if (connection) {
+    var networkInfo = "<strong>Informasi Jaringan:</strong><br>";
+    networkInfo += "Kecepatan Jaringan: " + (connection.downlink || 'Tidak Diketahui') + " Mbps<br>";
+    networkInfo += "Jenis Koneksi: " + (connection.effectiveType || 'Tidak Diketahui') + "<br>";
+
+    outputDiv.innerHTML = networkInfo;
+
+    // Mendapatkan informasi lokasi dan geolokasi
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        outputDiv.innerHTML += "<br><strong>Lokasi Anda:</strong> Latitude " + latitude + ", Longitude " + longitude;
+
+        // Menggunakan layanan GeoIP untuk mendapatkan informasi negara
+        fetch('https://get.geojs.io/v1/ip/geo.json')
+          .then(response => response.json())
+          .then(data => {
+            var country = data.country;
+            var region = data.region;
+            outputDiv.innerHTML += "<br><strong>Negara:</strong> " + country + "<br><strong>Wilayah:</strong> " + region;
+          })
+          .catch(error => {
+            console.error('Gagal mendapatkan informasi negara:', error);
+          });
+      });
+    } else {
+      outputDiv.innerHTML += "<br>Lokasi tidak tersedia.";
+    }
+  } else {
+    outputDiv.innerHTML = "Informasi jaringan tidak tersedia pada perangkat ini.";
+  }
+  		setTimeout(function() {
+        outputDiv.innerHTML = "";
+     }, 15000); // Menampilkan hasil prediksi selama 15 detik
+}
+
+
+
+	
+//###############################################################################################################################################################
+
+	    // Fungsi untuk menampilkan jam dan tanggal
+    function displayDateTime() {
+      var dateTimeDiv = document.getElementById('dateTime');
+      var now = new Date();
+      var date = now.toDateString();
+      var time = now.toLocaleTimeString();
+      var dateTimeString = "Date: " + date + "<br>Time: " + time;
+      dateTimeDiv.innerHTML = dateTimeString;
+    }
+
+    // Panggil fungsi displayDateTime untuk menampilkan waktu saat halaman dimuat
+    displayDateTime();
+
+    // Gunakan setInterval untuk memperbarui waktu setiap detik
+    setInterval(displayDateTime, 1000);
+	
+//###############################################################################################################################################################
+	
+function askQuestion() {
+	// Ambil pertanyaan dari input
+	var question = document.getElementById('questionInput').value;
+	var answer = getBotResponse(question); // Dapatkan respons dari bot
+
+	// Tampilkan respons di area jawaban
+	var answerArea = document.getElementById('answer');
+	answerArea.innerHTML = answer;
+  }
+
+function getBotResponse(question) {
+  // Pisahkan pertanyaan yang mungkin terdapat kata kunci
+  if (question.includes('sinyal yang baik') || question.includes('SINYAL YANG BAIK') || question.includes('Sinyal Yang Baik')) {
+    return '<div class="response-box">Sinyal jaringan Anda tergantung pada lokasi dan lingkungan sekitar Anda.</div>';
+  } else if (question.includes('ping') || question.includes('latensi') || question.includes('Ping') || question.includes('Latensi') || question.includes('PING') || question.includes('LATENSI')) {
+    checkPing(); // Panggil fungsi untuk melakukan cek ping
+    return '<div class="response-box">Tunggu Sebentar</div>';
+  } else if (question.includes('IP') || question.includes('ip')) {
+    checkPublicIP(); // Panggil fungsi untuk melakukan cek IP
+    return '<div class="response-box">Tunggu sebentar</div>';
+  } else if (question.includes('Sinyal') || question.includes('sinyal') || question.includes('SINYAL') || question.includes('jaringan') || question.includes('JARINGAN') || question.includes('saya baik') || question.includes('SAYA BAIK') || question.includes('Sinyal') || question.includes('Jaringan') || question.includes('Saya Baik')) {
+    togglePredictionInputs(); // Tampilkan kotak input prediksi
+    return '<div class="response-box">Masukkan latensi dan kecepatan untuk memeriksa kualitas jaringan.</div>';
+  } else {
+    return '<div class="response-box">Maaf, saya tidak mengerti pertanyaan itu.</div>';
+  }
+}
+
+// Ambil elemen input pertanyaan
+const questionInput = document.getElementById('questionInput');
+
+// Tambahkan event listener untuk menangani tombol "Enter" ditekan
+questionInput.addEventListener('keypress', function(event) {
+  if (event.key === 'Enter') {
+    const question = questionInput.value; // Dapatkan nilai dari input pertanyaan
+    const botResponse = getBotResponse(question); // Eksekusi fungsi getBotResponse dengan pertanyaan yang diberikan
+
+    // Tampilkan respons dari bot di dalam div answer
+    const answerArea = document.getElementById('answer');
+    answerArea.innerHTML = botResponse;
+
+    // Bersihkan nilai input setelah mengeksekusi respons bot
+    questionInput.value = '';
+  }
+});
+
+	// Fungsi baru untuk menyembunyikan kotak pesan
+function hideResponseBox() {
+  var responseBox = document.querySelector('.response-box');
+  if (responseBox) {
+    responseBox.style.display = 'none';
+  }
+}
+
+//###############################################################################################################################################################
+
+function predictNetworkQualityFromValues() {
+  var latency = 0; // Awalnya diatur ke 0
+  var speed = 0; // Awalnya diatur ke 0
+
+  // Cek jika informasi navigator.connection tersedia
+  if (navigator.connection) {
+    latency = navigator.connection.rtt; // Latency dalam milidetik (ms)
+    speed = navigator.connection.downlink; // Kecepatan dalam Mbps
+  }
+
+  var prediction = predictKNN(latency, speed);
+
+  displayPrediction(prediction);
+}
+
+// Panggil fungsi ini saat tombol untuk prediksi ditekan
+function performPrediction() {
+  predictNetworkQualityFromValues();
+}
+
+//###############################################################################################################################################################
+
+// Fungsi untuk memperbarui informasi jaringan real-time
+function updateNetworkInfo() {
+  var latencyDiv = document.getElementById('latency');
+  var speedDiv = document.getElementById('speed');
+
+  if (navigator.connection) {
+    var latency = navigator.connection.rtt; // Latency dalam milidetik (ms)
+    var speed = navigator.connection.downlink; // Kecepatan dalam Mbps
+
+    latencyDiv.value = latency;
+    speedDiv.value = speed;
+  } else {
+    latencyDiv.value = 'Tidak Diketahui';
+    speedDiv.value = 'Tidak Diketahui';
+  }
+}
+
+// Panggil fungsi ini saat tombol untuk prediksi ditekan
+function performPrediction() {
+  updateNetworkInfo(); // Memperbarui informasi jaringan
+  predictNetworkQualityFromValues(); // Melakukan prediksi berdasarkan nilai terbaru
+}
+
+//###############################################################################################################################################################
+
+  var currentBackgroundIndex = 0;
+  var backgrounds = [
+  
+    'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR04SGUg8YfD-Vi2HKyqKGaAcN5fJMtWOjDx7Tty68xxxZYpKkp&s")',
+    'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8uvfaXCnTgDi53Kwbo-A3E-4QfIIQIbs3OuAR_cBscyBIyjs_&s")',
+    'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIoE_uUwdyNMXHh8tVat02MwcSzBNk5ExOOlRhlk8vk_6q_Wrv&s")',
+    'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3TJNIueIeR0pxqHfG-63M7pZZHOL-meDNyxoF_xVJX3OmqdTT&s"',
+	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP86xf566z_hZ8QSgJp001-uwN5D_EAJi4zrCZ78DQFINqFiw&s")',
+    'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYYZqjoPenETuHLvs1YdoUeb9gCmsdX5KpAUWdGftyfyIaHfs&s")',
+    'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc-AubixaXD-qF4PVSRloABZ312UFnPw9zd9cnnxa5TuRMnn0&s")',
+    'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCFws9QGE9TQTIaIUA6IbJ60Bvq5UQYOItUMoolN14P-A4-g7X&s"',
+	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT06zKUAcnDvfQxe6KN0QKnOvvyDZDuHBKyDXEJWDeLo5Fyk8M1&s"',
+	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb_KD3CaeT4uSRYweywjn0B__DRWXKVKUXX2zv_cKcnX_M58mM&s"',
+	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-T323PJzhik_UvqZq7rpT9KvciL0qxwXmqedWVaU4gaW8CZXv&s"',
+	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaUr1Z1m_jkuez5wW6wmNoFxgToPb6dIlaOGoF4YAvj-3wDWM&s"',
+	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFxpAFqSWcTMZNbAAqGfWyUdA1wpqphNxBRPcXdl8PKRAhfeo&s"',
+	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2JdYLKCIGVKCzWf9poU9_yEj3--GARdXzrHh3CPopttk4uKsa&s"',
+	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-JUiiwd4Neq6rQraL0LDiLi0o3c9H_KCtrAyxQBg-jApuTLU&s"',
+	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQH59IJVwXh6t2C-8h0Xw9p8nwjaziRxTKzbIT__OzcUyKwo-Kl&s"',
+	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkI7IP3TcHvKBp0MfCIPGa24wz7jZoVqHSipnxtI600946w576&s"',
+	'linear-gradient(to right, #4682B4, #00FFFF, #00FA9A)',
+
+  ];
+
+  function changeBackground() {
+    var body = document.querySelector('body');
+    currentBackgroundIndex = (currentBackgroundIndex + 1) % backgrounds.length;
+    body.style.backgroundImage = backgrounds[currentBackgroundIndex];
+  }
+
+  // Call the function initially to set the background
+  changeBackground();
+  
+//###############################################################################################################################################################
+  
+   function resetPage() {
+    location.reload(); // Fungsi untuk memuat ulang halaman
+  }
+
+//###############################################################################################################################################################  
+
+	var historyData = [];
+	// Fungsi untuk menambahkan data percobaan ke tabel sementara
+    function addToHistory() {
+      var networkInfo = document.getElementById('networkInfo').innerText;
+	  var dateTime = document.getElementById('dateTime').innerText;
+      var pingResult = document.getElementById('networkQualityPing').innerText;
+      var publicIP = document.getElementById('networkQualityIP').innerText;
+	  var performPrediction = document.getElementById('predictionResult').innerText;
+
+	// Menyimpan data ke dalam variabel historyData
+    var data = [networkInfo, dateTime, pingResult, publicIP, performPrediction];
+    historyData.push(data);
+
+      // Ambil referensi tabel riwayat
+      var historyTable = document.getElementById('history');
+
+      // Buat baris baru untuk data percobaan
+      var newRow = historyTable.insertRow();
+
+      // Isi data ke dalam kolom-kolom tabel
+      var cellInfo = newRow.insertCell(0);
+      var cellDateTime = newRow.insertCell(1);
+      var cellPing = newRow.insertCell(2);
+      var cellIP = newRow.insertCell(3);
+	  var cellPredict = newRow.insertCell(4);
+
+      // Tambahkan isi ke dalam sel-sel tabel
+      cellInfo.innerHTML = networkInfo;
+      cellDateTime.innerHTML = dateTime;
+      cellPing.innerHTML = pingResult;
+      cellIP.innerHTML = publicIP;
+	  cellPredict.innerHTML = performPrediction;
+    }
+
+    // Fungsi untuk menyimpan data riwayat ke dalam file Excel
+    function saveToExcel() {
+    // Membuat objek workbook baru
+    var wb = XLSX.utils.book_new();
+    // Menyiapkan data yang akan disimpan dalam file Excel
+    var wsData = [
+      ['Informasi Jaringan', 'Waktu & Tanggal', 'Ping', 'Alamat IP', 'Hasil Prediksi'],
+      ...historyData // Menggunakan historyData yang telah disimpan sebelumnya
+    ];
+    // Menyimpan data ke dalam worksheet
+    var ws = XLSX.utils.aoa_to_sheet(wsData);
+    // Menambahkan worksheet ke dalam workbook
+    XLSX.utils.book_append_sheet(wb, ws, 'Network Data');
+    
+    // Mengekspor workbook ke dalam format Excel (XLSX)
+    var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+    // Mengonversi blob dan membuat file Excel
+    function s2ab(s) {
+      var buf = new ArrayBuffer(s.length);
+      var view = new Uint8Array(buf);
+      for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
+      return buf;
+    }
+
+    var fileData = s2ab(wbout);
+    var fileName = 'network_data.xlsx';
+
+    // Membuat link download untuk file Excel
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(new Blob([fileData], { type: 'application/octet-stream' }));
+    link.download = fileName;
+
+    // Menambahkan link ke dalam dokumen dan mengkliknya
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+//###############################################################################################################################################################  
+
+
+  </script>
+</body>
+</html>
