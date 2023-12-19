@@ -310,7 +310,7 @@ function displayPrediction(prediction) {
   
   setTimeout(function() {
     outputDiv.innerHTML = "";
-  }, 10000); // Menampilkan hasil prediksi selama 10 detik
+  }, 15000); // Menampilkan hasil prediksi selama 10 detik
 }
 
 // Data latensi, kecepatan jaringan, dan label kualitas jaringan
@@ -382,12 +382,12 @@ var latency = 0;
       }
 	    setTimeout(function() {
         outputDiv.innerHTML = "";
-     }, 10000); // Menampilkan hasil prediksi selama 10 detik
+     }, 15000); // Menampilkan hasil prediksi selama 10 detik
     };
 
     xhr.open('GET', '192.168.1.1', true); // Ganti dengan URL ping yang sesuai
     xhr.send();
-  }, 3000); // Delay dalam milidetik (di sini 2000ms atau 2 detik)
+  }, 2000); // Delay dalam milidetik (di sini 2000ms atau 2 detik)
 }
 
 //###############################################################################################################################################################
@@ -413,13 +413,13 @@ function checkPublicIP() {
         }  
 		setTimeout(function() {
         outputDiv.innerHTML = "";
-     }, 10000); // Menampilkan hasil prediksi selama 10 detik
+     }, 15000); // Menampilkan hasil prediksi selama 10 detik
       }
     };
 
     xhr.open('GET', 'https://api.ipify.org', true);
     xhr.send();
-  }, 3000); // Delay dalam milidetik (di sini 2000ms atau 2 detik)
+  }, 2000); // Delay dalam milidetik (di sini 2000ms atau 2 detik)
 }
 	
 //###############################################################################################################################################################
@@ -596,14 +596,14 @@ function performPrediction() {
   var currentBackgroundIndex = 0;
   var backgrounds = [
   
-    'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR04SGUg8YfD-Vi2HKyqKGaAcN5fJMtWOjDx7Tty68xxxZYpKkp&s")',
-    'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8uvfaXCnTgDi53Kwbo-A3E-4QfIIQIbs3OuAR_cBscyBIyjs_&s")',
-    'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIoE_uUwdyNMXHh8tVat02MwcSzBNk5ExOOlRhlk8vk_6q_Wrv&s")',
-    'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3TJNIueIeR0pxqHfG-63M7pZZHOL-meDNyxoF_xVJX3OmqdTT&s"',
+    	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR04SGUg8YfD-Vi2HKyqKGaAcN5fJMtWOjDx7Tty68xxxZYpKkp&s")',
+    	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8uvfaXCnTgDi53Kwbo-A3E-4QfIIQIbs3OuAR_cBscyBIyjs_&s")',
+    	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIoE_uUwdyNMXHh8tVat02MwcSzBNk5ExOOlRhlk8vk_6q_Wrv&s")',
+    	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3TJNIueIeR0pxqHfG-63M7pZZHOL-meDNyxoF_xVJX3OmqdTT&s"',
 	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP86xf566z_hZ8QSgJp001-uwN5D_EAJi4zrCZ78DQFINqFiw&s")',
-    'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYYZqjoPenETuHLvs1YdoUeb9gCmsdX5KpAUWdGftyfyIaHfs&s")',
-    'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc-AubixaXD-qF4PVSRloABZ312UFnPw9zd9cnnxa5TuRMnn0&s")',
-    'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCFws9QGE9TQTIaIUA6IbJ60Bvq5UQYOItUMoolN14P-A4-g7X&s"',
+    	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYYZqjoPenETuHLvs1YdoUeb9gCmsdX5KpAUWdGftyfyIaHfs&s")',
+    	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc-AubixaXD-qF4PVSRloABZ312UFnPw9zd9cnnxa5TuRMnn0&s")',
+    	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCFws9QGE9TQTIaIUA6IbJ60Bvq5UQYOItUMoolN14P-A4-g7X&s"',
 	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT06zKUAcnDvfQxe6KN0QKnOvvyDZDuHBKyDXEJWDeLo5Fyk8M1&s"',
 	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb_KD3CaeT4uSRYweywjn0B__DRWXKVKUXX2zv_cKcnX_M58mM&s"',
 	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-T323PJzhik_UvqZq7rpT9KvciL0qxwXmqedWVaU4gaW8CZXv&s"',
@@ -614,7 +614,6 @@ function performPrediction() {
 	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQH59IJVwXh6t2C-8h0Xw9p8nwjaziRxTKzbIT__OzcUyKwo-Kl&s"',
 	'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkI7IP3TcHvKBp0MfCIPGa24wz7jZoVqHSipnxtI600946w576&s"',
 	'linear-gradient(to right, #4682B4, #00FFFF, #00FA9A)',
-
   ];
 
   function changeBackground() {
