@@ -208,7 +208,6 @@
 	
 	<div class="saveExcel">
 	<button onclick="saveToExcel()">Save to Excel</button>
-    <button onclick="addToHistory()">Add to Riwayat</button>
   </div>
 
   <div class="content">
@@ -220,21 +219,21 @@
       <button onclick="showNetworkInfo()"><i class="fas fa-info-circle"></i> Info Jaringan</button>
       <button onclick="checkPing()"><i class="fas fa-wifi"></i> Cek Ping</button>
       <button onclick="checkPublicIP()"><i class="fas fa-globe"></i> Cek IP</button>
-	  <button onclick="togglePredictionInputs()"><i class="fas fa-chart-line"></i> Kalkulator Cek Kualitas Jaringan Metode KNN</button>
-	  <button onclick="performPrediction()">Dapatkan Prediksi</button>
-
-
+      <button onclick="performPrediction()">Dapatkan Prediksi</button>
+      <button onclick="togglePredictionInputs()"><i class="fas fa-chart-line"></i> Kalkulator Cek Kualitas Jaringan Metode KNN</button>
+      <button onclick="addToHistory()">Add to Riwayat</button>
     <div>
 	
-	<div>
+    <div>
       <input type="text" id="questionInput" placeholder="Tanyakan sesuatu...">
       <button onclick="askQuestion()">Kirim</button>
     </div>
+	    
     <div class="answer" id="answer"></div>
 	
-	<div class="info-jar" id="infoBox" style="display: none;">
-	<div id="networkInfo"></div>
-	</div>
+    <div class="info-jar" id="infoBox" style="display: none;">
+    <div id="networkInfo"></div>
+    </div>
 	
     <div class="info-section">
 	<div class="prediction-inputs" id="predictionInputs" style="display: none;">
@@ -246,15 +245,15 @@
 	</div>
     </div>
 	
-  <div class="info-predict">
-  <div id="predictionResult" style="font-weight: bold;"></div><!-- Tambahkan div untuk menampilkan hasil prediksi -->
+    <div class="info-predict">
+    <div id="predictionResult" style="font-weight: bold;"></div><!-- Tambahkan div untuk menampilkan hasil prediksi -->
   	</div>
   
     <div class="cek-kual">
       <div id="networkQualityPing"></div>
 	  <div id="networkQualityIP"></div>
     </div>
-  </div>
+    </div>
 
   <!-- Tabel untuk menampilkan riwayat sementara -->
   <div class="TabelBox">
